@@ -15,17 +15,29 @@ h1.style.fontWeight="bold";
 h1.style.color="green";
 console.log(h1);
 
-
+let select;
 // get elements by class name
-// let select=document.getElementsByClassName('list-group-item');
-// select[2].style.backgroundColor="green";
-// for(let i=0;i<select.length;i++){
-//     select[i].style.fontWeight="bold";
-// }
-
-//Tag name
-let select=document.getElementsByTagName('li');
+select=document.getElementsByClassName('list-group-item');
 select[2].style.backgroundColor="green";
 for(let i=0;i<select.length;i++){
     select[i].style.fontWeight="bold";
+}
+
+//Tag name
+select=document.getElementsByTagName('li');
+select[2].style.backgroundColor="green";
+for(let i=0;i<select.length;i++){
+    select[i].style.fontWeight="bold";
+}
+//queryselector
+select=document.querySelector('.list-group-item:nth-child(2)');
+select.style.backgroundColor="green";
+
+select=document.querySelector('.list-group-item:nth-child(3)');
+select.style.display="none";
+
+//queryselectorall
+select=document.querySelectorAll('.list-group-item:nth-child(odd)');
+for(let i=0;i<select.length;i++){
+    select[i].style.backgroundColor="green";
 }
