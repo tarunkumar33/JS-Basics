@@ -14,3 +14,11 @@ h1=document.querySelector('.title');
 h1.style.fontWeight="bold";
 h1.style.color="green";
 console.log(h1);
+
+
+// get elements by class name
+let select=document.getElementsByClassName('list-group-item');
+select[2].style.backgroundColor="green";
+for(let i=0;i<select.length;i++){
+    select[i].style.fontWeight="bold";
+}
