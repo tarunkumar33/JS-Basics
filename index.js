@@ -17,7 +17,14 @@ console.log(h1);
 
 
 // get elements by class name
-let select=document.getElementsByClassName('list-group-item');
+// let select=document.getElementsByClassName('list-group-item');
+// select[2].style.backgroundColor="green";
+// for(let i=0;i<select.length;i++){
+//     select[i].style.fontWeight="bold";
+// }
+
+//Tag name
+let select=document.getElementsByTagName('li');
 select[2].style.backgroundColor="green";
 for(let i=0;i<select.length;i++){
     select[i].style.fontWeight="bold";
