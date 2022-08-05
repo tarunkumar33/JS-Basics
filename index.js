@@ -1,67 +1,61 @@
-let form=document.getElementById('addForm');
-let itemList=document.getElementById('items');
-let filter=document.getElementById('filter');
+// USER FORM SCRIPT
 
-form.addEventListener('submit',addItem);
+// Put DOM elements into variables
+const myForm = document.querySelector('#my-form');
+const nameInput = document.querySelector('#name');
+const emailInput = document.querySelector('#email');
+const msg = document.querySelector('.msg');
+const userList = document.querySelector('#users');
 
-itemList.addEventListener('click',deleteItem);
-filter.addEventListener('keyup',filterItems);
+// Listen for form submit
+myForm.addEventListener('submit', onSubmit);
 
-function addItem(e){
-    e.preventDefault();
-    let newItem=document.getElementById('item');
-    var dec=document.getElementById('item-description');
-    let li=document.createElement('li');
-    li.className="list-group-item";
-    li.appendChild(document.createTextNode(newItem.value));
-    let btn=document.createElement('button');
-    btn.className="btn btn-danger btn-sm float-right delete";
-    btn.appendChild(document.createTextNode('X'));
-    li.appendChild(btn);
-    
+function onSubmit(e) {
+  e.preventDefault();
+  
+  if(nameInput.value === '' || emailInput.value === '') {
+    // alert('Please enter all fields');
+    msg.classList.add('error');
+    msg.innerHTML = 'Please enter all fields';
 
-    var div=document.createElement('div');
-    div.appendChild(document.createTextNode(dec.value));
-    li.appendChild(div);
+    // Remove error after 3 seconds
+    setTimeout(() => msg.remove(), 3000);
+  } else {
+    // Create new list item with user
+    var li = document.createElement('li');
 
-    btn=document.createElement('button');
-    btn.className="btn btn-secondary btn-sm float-right";
-    btn.appendChild(document.createTextNode('-'));
-    li.appendChild(btn);
-    itemList.appendChild(li);
-}
-
-function deleteItem(e){
-    if(e.target.classList.contains('delete')){
-        if(confirm('are u sure?')){
-    let removeItem=e.target.parentElement;
-    itemList.removeChild(removeItem);
+    // Add text node with input values
+    li.appendChild(document.createTextNode(`${nameInput.value}: ${emailInput.value}`));
+    if(localStorage.users){
+    localStorage.setItem('users',localStorage.users+'|'+nameInput.value);
+    localStorage.setItem('email',localStorage.email+'|'+emailInput.value);
     }
-}
+    else{
+    localStorage.setItem('users',nameInput.value);
+    localStorage.setItem('email',emailInput.value);
+    }
+
+    // Add HTML
+    // li.innerHTML = `<strong>${nameInput.value}</strong>e: ${emailInput.value}`;
+
+    // Append to ul
+    userList.appendChild(li);
+
+    // Clear fields
+    nameInput.value = '';
+    emailInput.value = '';
+  }
 }
 
-let items=document.querySelectorAll('.list-group-item');
-for(let select of items){
-    let btn=document.createElement('button');
-    btn.className="btn btn-secondary btn-sm float-right";
-    btn.appendChild(document.createTextNode('-'));
-    select.appendChild(btn);
-}
-
-function filterItems(e){
-    // textr->lower
-    var text=e.target.value.toLowerCase();
-    var li=itemList.getElementsByTagName('li');
-    // collection to array
-    Array.from(li).forEach((x)=>{
-        var itemName=x.firstChild.textContent.toLowerCase();
-        var itemDesc=x.children[1].textContent.toLowerCase();
-        if(itemName.indexOf(text)!=-1 || itemDesc.indexOf(text)!=-1){
-            x.style.display="block";
-        }
-        else{
-            x.style.display="none";
-        }
-    });
+if(localStorage.users){
+    var users=localStorage.users.split('|');
+    var emails=localStorage.email.split('|');
+    for(let i=0;i<users.length;i++){
+    var li = document.createElement('li');
+    li.appendChild(document.createTextNode(`${users[i]}: ${emails[i]}`));
+    userList.appendChild(li);
+    }
 
 }
+
+
