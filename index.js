@@ -1,82 +1,40 @@
-// console.log(document);
+let form=document.getElementById('addForm');
+let itemList=document.getElementById('items');
 
-// console.dir(document.firstChild);
-// console.log(document.getElementById('header-title'));
-// let h1=document.getElementById('header-title');
-// console.log(h1.innerText);
-// console.log(h1.textContent);
+form.addEventListener('submit',addItem);
 
-// h1=document.getElementById('main-header');
+itemList.addEventListener('click',deleteItem);
 
-// h1.style.borderBottom="2px solid black";
+function addItem(e){
+    e.preventDefault();
+    let newItem=document.getElementById('item');
+    let li=document.createElement('li');
+    li.className="list-group-item";
+    li.appendChild(document.createTextNode(newItem.value));
+    let btn=document.createElement('button');
+    btn.className="btn btn-danger btn-sm float-right delete";
+    btn.appendChild(document.createTextNode('X'));
+    li.appendChild(btn);
+    btn=document.createElement('button');
+    btn.className="btn btn-secondary btn-sm float-right";
+    btn.appendChild(document.createTextNode('-'));
+    li.appendChild(btn);
+    itemList.appendChild(li);
+}
 
-// h1=document.querySelector('.title');
-// h1.style.fontWeight="bold";
-// h1.style.color="green";
-// console.log(h1);
+function deleteItem(e){
+    if(e.target.classList.contains('delete')){
+        if(confirm('are u sure?')){
+    let removeItem=e.target.parentElement;
+    itemList.removeChild(removeItem);
+    }
+}
+}
 
-// let select;
-// // get elements by class name
-// select=document.getElementsByClassName('list-group-item');
-// select[2].style.backgroundColor="green";
-// for(let i=0;i<select.length;i++){
-//     select[i].style.fontWeight="bold";
-// }
-
-// //Tag name
-// select=document.getElementsByTagName('li');
-// select[2].style.backgroundColor="green";
-// for(let i=0;i<select.length;i++){
-//     select[i].style.fontWeight="bold";
-// }
-// //queryselector
-// select=document.querySelector('.list-group-item:nth-child(2)');
-// select.style.backgroundColor="green";
-
-// select=document.querySelector('.list-group-item:nth-child(3)');
-// select.style.display="none";
-
-// //queryselectorall
-// select=document.querySelectorAll('.list-group-item:nth-child(odd)');
-// for(let i=0;i<select.length;i++){
-//     select[i].style.backgroundColor="green";
-// }
-//Traversing the DOM
-select=document.querySelector('#items');
-console.log(select.parentNode);
-console.log(select.parentElement);
-console.log(select.children);
-console.log(select.firstElementChild);
-console.log(select.lastElementChild);
-console.log(select.nextElementSibling);
-console.log(select.previousElementSibling);
-console.log(select.childNodes);
-console.log(select.firstChild);
-console.log(select.lastChild);
-console.log(select.nextSibling);
-console.log(select.previousSibling);
-
-let h1=document.createElement('h1');
-h1.className="hello"
-h1.setAttribute('title','hello');
-h1.appendChild(document.createTextNode('HEllo'));
-console.log(h1);
-
-let container=document.querySelector('header .container');
-let header=document.querySelector('header h1');
-
-container.insertBefore(h1,header);
-container=document.querySelector('#items');
-header=document.querySelector('.list-group-item');
-
-h1=document.createElement('h1');
-h1.className="hello"
-h1.setAttribute('title','hello');
-h1.appendChild(document.createTextNode('HEllo'));
-container.insertBefore(h1,header);
-
-
-
-
-
-
+let items=document.querySelectorAll('.list-group-item');
+for(let select of items){
+    let btn=document.createElement('button');
+    btn.className="btn btn-secondary btn-sm float-right";
+    btn.appendChild(document.createTextNode('-'));
+    select.appendChild(btn);
+}
