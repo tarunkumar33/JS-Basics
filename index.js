@@ -9,6 +9,7 @@ const userList = document.querySelector('#users');
 
 // Listen for form submit
 myForm.addEventListener('submit', onSubmit);
+userList.addEventListener('click',removeItem);
 
 function onSubmit(e) {
   e.preventDefault();
@@ -23,33 +24,38 @@ function onSubmit(e) {
   } else {
     // Create new list item with user
     var li = document.createElement('li');
-
+    li.className="list-group-item";
+    li.id=emailInput.value;
     // Add text node with input values
     li.appendChild(document.createTextNode(`${nameInput.value}: ${emailInput.value}`));
-    if(localStorage.userObjects){
-    var obj={
-        name:nameInput.value,
-        email:emailInput.value
-    };
-    localStorage.setItem('userObjects',localStorage.userObjects+'|'+JSON.stringify(obj));
-    localStorage.setItem('users',localStorage.users+'|'+nameInput.value);
-    localStorage.setItem('email',localStorage.email+'|'+emailInput.value);
-    }
-    else{
+    var btn=document.createElement('button');
+    btn.className="btn btn-danger btn-sm float-right delete";
+    btn.appendChild(document.createTextNode('X'));
+
         var obj={
             name:nameInput.value,
             email:emailInput.value
         };
-        localStorage.setItem('userObjects',JSON.stringify(obj));
-    localStorage.setItem('users',nameInput.value);
-    localStorage.setItem('email',emailInput.value);
-    }
+        var x=emailInput.value;
+        if(localStorage.getItem(x)){
+            var del=document.getElementById(x);
+            del.remove();
+        }
+        localStorage.setItem(emailInput.value,JSON.stringify(obj));
+
+    
 
     // Add HTML
     // li.innerHTML = `<strong>${nameInput.value}</strong>e: ${emailInput.value}`;
 
     // Append to ul
+    li.appendChild(btn);
+    btn=document.createElement('button');
+    btn.className="btn btn-primary btn-sm float-right edit";
+    btn.appendChild(document.createTextNode('-'));
+    li.appendChild(btn);
     userList.appendChild(li);
+    
 
     // Clear fields
     nameInput.value = '';
@@ -57,15 +63,49 @@ function onSubmit(e) {
   }
 }
 
-if(localStorage.userObjects){
-    var usersJSON=localStorage.userObjects.split('|');
-    for(var i of usersJSON){
-        var user=JSON.parse(i);
-        var li = document.createElement('li');
+
+
+Object.keys(localStorage).forEach((key) => {
+
+
+
+    stringifiedDetailsOfPeople = localStorage.getItem(key);
+    
+    user = JSON.parse(stringifiedDetailsOfPeople);
+    var li = document.createElement('li');
+    li.className="list-group-item";
+    li.id=user.email;
     li.appendChild(document.createTextNode(`${user.name}: ${user.email}`));
+    var btn=document.createElement('button');
+    btn.className="btn btn-danger btn-sm float-right delete";
+    btn.appendChild(document.createTextNode('X'));
+    li.appendChild(btn);
+    btn=document.createElement('button');
+    btn.className="btn btn-primary btn-sm float-right edit";
+    btn.appendChild(document.createTextNode('-'));
+    li.appendChild(btn);
     userList.appendChild(li);
+    
+    
+    
+    
+    });
+
+function removeItem(e){
+    e.preventDefault();
+    if(e.target.classList.contains('delete')){
+
+        var dele=e.target.parentElement.id;
+        localStorage.removeItem(dele);
+        e.target.parentElement.remove();
+
     }
+    else if(e.target.classList.contains('edit')){
+        var edi=e.target.parentElement.id;
+        var userr=JSON.parse(localStorage.getItem(edi));
+        nameInput.value=userr.name;
+        emailInput.value=userr.email;
 
+    }
 }
-
 
