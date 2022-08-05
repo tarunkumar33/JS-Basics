@@ -26,11 +26,21 @@ function onSubmit(e) {
 
     // Add text node with input values
     li.appendChild(document.createTextNode(`${nameInput.value}: ${emailInput.value}`));
-    if(localStorage.users){
+    if(localStorage.userObjects){
+    var obj={
+        name:nameInput.value,
+        email:emailInput.value
+    };
+    localStorage.setItem('userObjects',localStorage.userObjects+'|'+JSON.stringify(obj));
     localStorage.setItem('users',localStorage.users+'|'+nameInput.value);
     localStorage.setItem('email',localStorage.email+'|'+emailInput.value);
     }
     else{
+        var obj={
+            name:nameInput.value,
+            email:emailInput.value
+        };
+        localStorage.setItem('userObjects',JSON.stringify(obj));
     localStorage.setItem('users',nameInput.value);
     localStorage.setItem('email',emailInput.value);
     }
@@ -47,12 +57,12 @@ function onSubmit(e) {
   }
 }
 
-if(localStorage.users){
-    var users=localStorage.users.split('|');
-    var emails=localStorage.email.split('|');
-    for(let i=0;i<users.length;i++){
-    var li = document.createElement('li');
-    li.appendChild(document.createTextNode(`${users[i]}: ${emails[i]}`));
+if(localStorage.userObjects){
+    var usersJSON=localStorage.userObjects.split('|');
+    for(var i of usersJSON){
+        var user=JSON.parse(i);
+        var li = document.createElement('li');
+    li.appendChild(document.createTextNode(`${user.name}: ${user.email}`));
     userList.appendChild(li);
     }
 
