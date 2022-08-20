@@ -17,6 +17,8 @@ myForm.addEventListener('submit', onSubmit);
 userList.addEventListener('click',removeItem);
 
 window.addEventListener('DOMContentLoaded',loadData);
+//
+let uniqueId='';
 
 function onSubmit(e) {
   e.preventDefault();
@@ -28,7 +30,29 @@ function onSubmit(e) {
 
     // Remove error after 3 seconds
     setTimeout(() => msg.remove(), 3000);
-  } else {
+  } 
+  else if(uniqueId!=''){
+    var obj={
+        name:nameInput.value,
+        email:emailInput.value
+    };
+    
+    axiosobj.put(`/appointmentData/${uniqueId}`,obj)
+    .then(res=>{
+        document.getElementById(uniqueId).remove();
+        showScreen({_id:uniqueId,...obj});
+        // Clear fields
+        nameInput.value = '';
+        emailInput.value = '';
+        uniqueId='';
+
+    })
+    .catch(err=>console.log(err));
+
+    
+
+  }
+  else {
 
         var obj={
             name:nameInput.value,
@@ -41,6 +65,7 @@ function onSubmit(e) {
     // Clear fields
     nameInput.value = '';
     emailInput.value = '';
+    uniqueId='';
   }
 }
 function showScreen(user){
@@ -81,9 +106,17 @@ function removeItem(e){
     }
     else if(e.target.classList.contains('edit')){
         var edi=e.target.parentElement.id;
-        var userr=JSON.parse(localStorage.getItem(edi));
-        nameInput.value=userr.name;
-        emailInput.value=userr.email;
+        uniqueId=edi;
+        axiosobj.get(`/appointmentData/${uniqueId}`)
+        .then((res)=>{
+            nameInput.value=res.data.name;
+            emailInput.value=res.data.email;
+        })
+        .catch(err=>{
+            uniqueId='';
+            console.log(err);
+        });
+        
 
     }
 }
