@@ -16,6 +16,8 @@ const userList = document.querySelector('#users');
 myForm.addEventListener('submit', onSubmit);
 userList.addEventListener('click',removeItem);
 
+window.addEventListener('DOMContentLoaded',loadData);
+
 function onSubmit(e) {
   e.preventDefault();
   
@@ -71,9 +73,30 @@ function onSubmit(e) {
     emailInput.value = '';
   }
 }
+function showScreen(user){
+    var li = document.createElement('li');
+    li.className="list-group-item";
+    li.id=user.email;
+    li.appendChild(document.createTextNode(`${user.name}: ${user.email}`));
+    var btn=document.createElement('button');
+    btn.className="btn btn-danger btn-sm float-right delete";
+    btn.appendChild(document.createTextNode('X'));
+    li.appendChild(btn);
+    btn=document.createElement('button');
+    btn.className="btn btn-primary btn-sm float-right edit";
+    btn.appendChild(document.createTextNode('-'));
+    li.appendChild(btn);
+    userList.appendChild(li);
+}
 
-
-
+function loadData(){
+axiosobj.get("/appointmentData")
+.then((res)=>{
+    for(let i of res.data){
+        showScreen(i);
+    }
+})
+.catch(err=>console.log(err));
 Object.keys(localStorage).forEach((key) => {
 
 
@@ -99,6 +122,7 @@ Object.keys(localStorage).forEach((key) => {
     
     
     });
+}
 
 function removeItem(e){
     e.preventDefault();
